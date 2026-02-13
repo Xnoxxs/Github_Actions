@@ -1,5 +1,8 @@
 name: Python CI
 
+# This defines when the workflow runs.
+# It runs when:
+# You push code directly to 'main' branch
 on:
   push:
     branches: [ main ]
@@ -9,22 +12,32 @@ on:
 jobs:
   test:
 
+    # GitHub creates a temporary Ubuntu Linux machine in the cloud.
+    # “Give me a clean computer, run my code, then delete it.”
     runs-on: ubuntu-latest
 
+    # Each job runs a series of steps.
     steps:
+
+    # This downloads your repository into the virtual machine.
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # This installs Python on the machine.
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: "3.11"
 
+    # This installs Python dependencies on the machine.
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # This runs your test suite.
+      # ✅ All tests pass → workflow succeeds
+      # ❌ Any test fails → workflow fails (red ❌ on GitHub)
     - name: Run tests
       run: |
         pytest
